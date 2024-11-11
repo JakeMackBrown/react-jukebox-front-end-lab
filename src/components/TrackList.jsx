@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const TrackList = ({ onEditTrack, onDeleteTrack, onPlayTrack }) => {
+const TrackList = (props) => {
   const [tracks, setTracks] = useState([]);
 
   useEffect(() => {
@@ -24,9 +24,9 @@ const TrackList = ({ onEditTrack, onDeleteTrack, onPlayTrack }) => {
         {tracks.map(track => (
           <li key={track._id}>
             {track.title} by {track.artist}
-            <button onClick={() => onEditTrack(track)}>Edit</button>
-            <button onClick={() => onDeleteTrack(track._id)}>Delete</button>
-            <button onClick={() => onPlayTrack(track)}>Play</button>
+            <button onClick={() => props.onEditTrack(track)}>Edit</button>
+            <button onClick={() => props.onDeleteTrack(track._id)}>Delete</button>
+            <button onClick={() => props.onPlayTrack(track)}>Play</button>
           </li>
         ))}
       </ul>

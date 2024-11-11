@@ -39,6 +39,15 @@ const App = () => {
     setCurrentTrack(track);
   };
 
+  const trackProps = {
+    onEditTrack: handleEditTrack,
+    onDeleteTrack: handleDeleteTrack,
+    onPlayTrack: handlePlayTrack,
+    currentTrack: currentTrack,
+    onSave: handleSaveTrack,
+    onCancel: handleCancel
+  };
+
   return (
     <div className="App">
       <header>
@@ -48,20 +57,8 @@ const App = () => {
           <button onClick={handleAddTrack}>Add Track</button>
         </nav>
       </header>
-      {view === 'list' && (
-        <TrackList
-          onEditTrack={handleEditTrack}
-          onDeleteTrack={handleDeleteTrack}
-          onPlayTrack={handlePlayTrack}
-        />
-      )}
-      {view === 'form' && (
-        <TrackForm
-          currentTrack={currentTrack}
-          onSave={handleSaveTrack}
-          onCancel={handleCancel}
-        />
-      )}
+      {view === 'list' && <TrackList {...trackProps} />}
+      {view === 'form' && <TrackForm {...trackProps} />}
       <NowPlaying track={currentTrack} />
     </div>
   );
