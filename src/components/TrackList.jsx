@@ -1,19 +1,28 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { index, deleteTrack } from '../services/trackService';
 
 const TrackList = (props) => {
   const [tracks, setTracks] = useState([]);
 
   useEffect(() => {
-    fetchTracks();
+    const loadTracks = async () => {
+      try {
+        const tracksData = await index();
+        setTracks(tracksData);
+      } catch (error) {
+        console.error('Error loading tracks:', error);
+      }
+    };
+    loadTracks();
   }, []);
 
-  const fetchTracks = async () => {
+  const handleDeleteTrack = async (trackId) => {
     try {
-      const response = await axios.get('http://localhost:3000/tracks');
-      setTracks(response.data);
+      await deleteTrack(trackId);
+      const updatedTracks = tracks.filter(track => track._id !== trackId);
+      setTracks(updatedTracks);
     } catch (error) {
-      console.error('Error fetching tracks:', error);
+      console.error('Error deleting track:', error);
     }
   };
 
@@ -25,7 +34,7 @@ const TrackList = (props) => {
           <li key={track._id}>
             {track.title} by {track.artist}
             <button onClick={() => props.onEditTrack(track)}>Edit</button>
-            <button onClick={() => props.onDeleteTrack(track._id)}>Delete</button>
+            <button onClick={() => handleDeleteTrack(track._id)}>Delete</button>
             <button onClick={() => props.onPlayTrack(track)}>Play</button>
           </li>
         ))}
